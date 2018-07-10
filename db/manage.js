@@ -1,8 +1,11 @@
 const {ObjectID} = require('mongodb')
+const _ = require('underscore');
+
 let addData= function(req,res,Ref){
     let ref = new Ref({
         name : req.body.name,
-        price : req.body.price
+        price : req.body.price,
+        partyname : req.body.partyname
     }); 
 
     ref.save().then((promotions)=>{
@@ -53,7 +56,7 @@ let getDataById = function(req,res,Ref){
 
  let updateDataById = function(req,res,Ref){
      var id = req.params.id;
-     var body = _.pick(req.body,['name','price','completed']);
+     var body = _.pick(req.body,['name','partyname','price','completed']);
      if(!ObjectID.isValid(id)){
          return res.status(404).send();
      }
@@ -66,7 +69,6 @@ let getDataById = function(req,res,Ref){
  
      }
  
-     console.log(body);
  
      Ref.findByIdAndUpdate(id,{$set : body},{new : true}).then((Ref)=>{
          if(!Ref){
